@@ -1,1 +1,2 @@
-Design Doc
+Goals and scope of project
+People involved

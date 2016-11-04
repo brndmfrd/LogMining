@@ -1,0 +1,56 @@
+================================================
+Tool chain
+================================================
+Cygwin (local)
+    https://www.cygwin.com/
+    +openssh 
+    +vim
+
+Github for Windows
+    https://desktop.github.com/
+   
+github version control
+    public repository: https://github.com/brndmfrd/LogMining
+    
+python v3.4.5 interpreter (local & remote)  
+    https://www.python.org/downloads/windows/
+    
+R v3.3.2 interpreter
+    https://cran.cnr.berkeley.edu/
+    
+    
+    
+================================================
+Project Directory Structure
+================================================  
+LogMiningWs (Log Mining work-space)
+    ::Version Control at this level and below::
+    LogMining/
+         Documentation/
+             {Indexed tests - documentation that offers a description of each (trial|test) contained in "Trials" directory. Descriptions should be overviews and lay-friendly}
+             {Techinal document - what technology was used, where and how}
+             {Design document - Goals and scope of project, people involved}
+             {Progress report backlog, regular (weekly/monthly) report of progress}
+         Trials/
+             {Trial AA}
+                 {Test 00} // Test hypothesis #AA00
+                     {Technical documentation (non-lay-friendly), what is the goal, how does it run, what does it do, how to measure success, how to use it, etc.}
+                     Outputs/
+                         {Output directory, results of running test}
+                     Scripts/
+                         {Scripts used to run test}
+                 {Test 01} // Test hypothesis #AA01
+                 {Test 99} // Test hypothesis #AA99
+             {Trial AB}
+             {Trial ZZ}
+Inputs/
+ {directory of raw input files (logs); read-only; sharable throughout all projects}
+      
+        
+        
+        
+        
+        
+        
+        
+        

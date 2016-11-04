@@ -1,0 +1,36 @@
+# A high-level description, explanation, and reasonsing for each indexed trial.
+# Each trial should have a common name listed here for the sake of human-friendly 
+# readability and referencing.
+
+Trial AA00 "COMMON NAME"
+    Core concept:
+    Approach:
+    Scripts involved:
+    Flow of process:
+    Result:
+    Analysis:
+    
+Trial AA00 "COMMON NAME"
+    Core concept:
+    Approach:
+    Scripts involved:
+    Flow of process:
+    Result:
+    Analysis:
+    
+Trial AA00 "COMMON NAME"
+    Core concept:
+    Approach:
+    Scripts involved:
+    Flow of process:
+    Result:
+    Analysis:
+    
+Trial AA00 "COMMON NAME"
+    Core concept:
+    Approach:
+    Scripts involved:
+    Flow of process:
+    Result:
+    Analysis:
+    

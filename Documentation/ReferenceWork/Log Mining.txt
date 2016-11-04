@@ -1,0 +1,92 @@
+http://www.slideshare.net/anton_chuvakin/log-data-mining
+
+Why mine logs
+    too much data
+    not enough data
+    too many diverse records
+    false alarms
+    duplicate data
+    hard to get data
+    
+Why use mining techniques
+    reduce reliance on skilled analysts - reduce skill level of people analysing the logs
+    dealing with sparse data in large sets 
+    detect otherwise hidden issues
+    offload conclusion generation; give the human coming to a conclusion a better idea about what is going on so they may come to a fast and accurace conclusion
+    best method for problem prediction
+    
+Catagories to look for
+    Rare events happening frequently
+    Unique events that have been previously unseen
+    Strange combinations of events
+    Top events, e.g. these are the top X most frequently occuring events
+    Bottom events, e.g. these are the top X least frequently occuring events
+    Counts, e.g. how often does X happen
+    
+Potential techniques
+    Clustering
+    Association discovery
+    Itemset discovery
+    Sequential pattern discovery
+    Classification
+    Regression
+    Deviation detection
+    
+Process
+    Acquire expertise on the subject (knowing what to mine for and how to mine for it)
+    Define the goal
+    Collect data
+    preprocessing/data cleaning
+    mapreduce or other data management stratagy
+    choose method
+    choose algorithm
+    run
+    analyse
+    
+---------------------------------------
+
+Consolt
+    Request expertise of logs.  What each log can potentialy give insite to.  Create a list for each log and each combination of logs.
+    What logs to look at and what logs will not make an adequate canidate for mining.
+
+Format
+    Each record begins with a timestamp and spans one or more lines.  The beginning of the next line is indicated by a new timestamp.
+    Timestamps are expected to be of a set format.
+    Blank lines are to be ignored.
+    Many (All?) records will have a sev-level tag in all caps \[[ERROR WARN DEBUG]{1}\]
+    
+Map log data more efficient mining
+    map words to symbols for faster data processing, smaller data to process
+    
+Use data, now converted to symbols, to perform routines
+        
+    
+---------------------------------------
+
+
+Local application for log gathering
+
+Procedure:
+1) Read config file containing a list of log names.  The syntax will be the log name prefix and assumed kleen star suffix (to compensate for the way older logs are named)
+2) Read config file containing the path to where the log files are kept.  This will be a full path.
+2.5) Read config file containing the location to save the logs.  This will be a full path.
+3) Prompt user for the timespan they are interested.
+4) Use the provided path to go to the location where the logs are kept.
+5) For each log read the name of the log file and the 'Date Modified'.
+6) Compare the file name and 'Date Modified' against the list of log names to collect and the timefrom from which to collect from.
+7) If one of the matches fail, contineue to next reconrd
+8) If there is a match, create a compressed copy of the file and store the compressed copy in the location to to save the logs as provided by the config file.
+9) Continue until there are no more log files to read in the given directory.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
