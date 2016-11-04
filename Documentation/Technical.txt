@@ -18,6 +18,9 @@ python v3.4.5 interpreter (local & remote)
 R v3.3.2 interpreter
     https://cran.cnr.berkeley.edu/
     
+7zip    
+    http://www.7-zip.org/download.html
+    
     
     
 ================================================
