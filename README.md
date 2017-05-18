@@ -6,7 +6,7 @@ R v3.3.2
 
 
 
-#Directory Structure
+# Directory Structure
 
 *bin/
 	Binarys are kept here. These binaries are designed strictly to do processing. Any sanitizing, parsing, presenging graphical output should be done in the utilities (util/) directory. These binaries are aware of their relative location in the directory structure.
