@@ -3,6 +3,11 @@ import os
 import re
 
 
+PROJNAME = 'LogMining'
+DIRPATHCONF = PROJNAME + '/conf/dirpaths.conf'
+inputdir = ''
+
+
 def main(inpath, outpath):
     expr = re.compile(r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])")
     somestring = r"alphabet[TRACE]soup"
@@ -18,19 +23,33 @@ def main(inpath, outpath):
 
 
 
+def GetInputDir(infile):
+    cwd = os.getcwd()
+    inputdir = cwd.split(PROJNAME, 1)[0]
+    inpath = os.path.join(inputdir, DIRPATHCONF)
+    # check if file exists
+    # try to read file
+    # parse json file for input dir
+    # check if input dir exists
+    # use file name parameter to look for file contained by input dir
+    # try to read input file (permissions check)
+    # work? good! not working? boo!
+    
+
 if __name__ == "__main__":
     infile = ""
 
     if len(sys.argv) != 2:
-        print ("Absolute path to file name required as argument.")
+        print ("File name required as argument (i.e. myinputfile.txt)")
     else:
         infile = sys.argv[1]
  
-    cwd = os.path.dirname(__file__)
-    inpath = os.path.join(cwd, infile)    
-    outpath = infile + ".X"
+    GetInputDir(infile)
 
-    print ("Begin parseing file: " + inpath)
-    print ("Output to file: " + outpath)
+    # Define output file stuff here
+    outfile = infile + ".X"
+
+    print ("Begin parseing file: " + infile)
+    print ("Output to file: " + outfile)
     
-    main(inpath, outpath)
+    #main(inpath, outpath)
