@@ -6,6 +6,9 @@ __pycache__/
 # Large raw data files
 /data/Input
 
+# Temp Files
+*~
+
 # C extensions
 *.so
 

@@ -1,15 +1,36 @@
+#!/usr/local/bin/python3.6
+
 import sys
 import os
 import re
+import json
+
+import Configurator
+
+# These are the values that we are parsing on
+FLAGSRGX = r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])"
+
+# This script will derive the full path to the in and out files
+Inpath = ''
+Outpath = ''
 
 
-PROJNAME = 'LogMining'
-DIRPATHCONF = PROJNAME + '/conf/dirpaths.conf'
-inputdir = ''
+def Main(infile):
+    outfile = f"{infile}.out"
 
+    print (f"Proceeding with filename {infile} as input.")
+    print (f"Proceeding with filename {outfile} as output.")
+    
+    configDict = Configurator.SetConfigurations(['input', 'output'])
 
-def main(inpath, outpath):
-    expr = re.compile(r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])")
+    Inpath = configDict['input']
+    Outpath = configDict['output']
+
+    print (Inpath)
+    print (Outpath)
+
+    return
+    expr = re.compile(FLAGSRGX)
     somestring = r"alphabet[TRACE]soup"
 
     with open(inpath, 'r') as instream:
@@ -21,35 +42,9 @@ def main(inpath, outpath):
 
     print ("--DoneonRings--") 
 
-
-
-def GetInputDir(infile):
-    cwd = os.getcwd()
-    inputdir = cwd.split(PROJNAME, 1)[0]
-    inpath = os.path.join(inputdir, DIRPATHCONF)
-    # check if file exists
-    # try to read file
-    # parse json file for input dir
-    # check if input dir exists
-    # use file name parameter to look for file contained by input dir
-    # try to read input file (permissions check)
-    # work? good! not working? boo!
-    
-
 if __name__ == "__main__":
-    infile = ""
-
     if len(sys.argv) != 2:
-        print ("File name required as argument (i.e. myinputfile.txt)")
+        print ("A file name is required as argument i.e.$tagPrs.py myinputfile.txt")
+        print ("This process will now close.")
     else:
-        infile = sys.argv[1]
- 
-    GetInputDir(infile)
-
-    # Define output file stuff here
-    outfile = infile + ".X"
-
-    print ("Begin parseing file: " + infile)
-    print ("Output to file: " + outfile)
-    
-    #main(inpath, outpath)
+        Main(sys.argv[1])
