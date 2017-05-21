@@ -26,15 +26,27 @@ def Main(infile):
     Inpath = configDict['input']
     Outpath = configDict['output']
 
-    print (Inpath)
-    print (Outpath)
+    print (f'Using input directory: {Inpath}')
+    print (f'Using output directory: {Outpath}')
 
-    return
+    if len(Inpath)<=0 or len(Outpath)<=0:
+        print (f'Inpath or Outpath could not be determined. Please ensure this script is being ran from inside the project directory structure. This process will now terminate.')
+        return
+
+    inFileNamePath = Inpath + infile
+    outFileNamePath = Outpath + outfile
+
+    print (f'Using input full filename path: {inFileNamePath}')
+    print (f'Using output full filename path: {outFileNamePath}')
+
+    ParseMap(inFileNamePath, outFileNamePath)
+
+
+def ParseMap(infile, outfile):
     expr = re.compile(FLAGSRGX)
-    somestring = r"alphabet[TRACE]soup"
 
-    with open(inpath, 'r') as instream:
-        with open(outpath, 'w') as outstream:
+    with open(infile, 'r') as instream:
+        with open(outfile, 'w') as outstream:
             for line in instream:
                 word = expr.search(line)
                 if (word):
@@ -42,9 +54,12 @@ def Main(infile):
 
     print ("--DoneonRings--") 
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print ("A file name is required as argument i.e.$tagPrs.py myinputfile.txt")
         print ("This process will now close.")
     else:
         Main(sys.argv[1])
+
+#TODO: if no input file name is given display the files in the Input/ to the user
