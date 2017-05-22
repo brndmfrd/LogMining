@@ -10,6 +10,12 @@ import Configurator
 # These are the values that we are parsing on
 FLAGSRGX = r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])"
 
+# [2015-09-20T19:59:24.5499068-04:00] [DEBUG]
+# This assumes lines that start with a bracket start with a timestamp bracket.
+TIMESTAMPRGX = r'(^\[.+?\.)'
+#DATERGX = r'([0-9]{4}\-[0-9]{2}\-[0-9]+)'
+#TIMERGX = r'[0-9]+\:[0-9]{2}\:[0-9]{2})'
+
 # This script will derive the full path to the in and out files
 Inpath = ''
 Outpath = ''
@@ -43,14 +49,35 @@ def Main(infile):
 
 
 def ParseMap(infile, outfile):
-    expr = re.compile(FLAGSRGX)
+    timestampRgxC = re.compile(TIMESTAMPRGX)
+    #dateRgxC = re.compile(DATERGX)
+    #timeRgxC = re.compile(TIMERGX)
+    flagRgxC = re.compile(FLAGSRGX)
+    timeSegments = []
+    modulus = 0
+    previousDate = ''
 
     with open(infile, 'r') as instream:
-        with open(outfile, 'w') as outstream:
-            for line in instream:
-                word = expr.search(line)
-                if (word):
-                    outstream.write(word.group() + '\n')
+        for line in instream:
+            time = timestampRgxC.search(line)
+            flag = flagRgxC.search(line)
+            
+            if (time and flag):
+                datetime = time.group().split('T')
+                date = datetime[0]
+                time = datetime[1]
+                
+                print ('Date: ' + date)
+                print ('Time: ' + time)
+
+                if(len(previousDate)<=0):
+                    previousTime = time
+                
+                if(previousTime is not time):
+                    print ('The log has rolled over to the next day. Parser will now self terminate. Hasta la vista.')
+                    return
+                
+                #outstream.write(word.group()[1])
 
     print ("--DoneonRings--") 
 

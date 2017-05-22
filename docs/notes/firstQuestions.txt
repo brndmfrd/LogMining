@@ -1,0 +1,20 @@
+Note: 
+      "record type" => {warn, error, fatal, debug, info, verbose}
+      "log" => the log file itself
+      "record" => a single line in a given log file
+
+What is the frequency of each record type?
+
+How many of each record type is in a given log?
+
+What is the most common record? 
+
+What is the most common record by record type?
+     most common debug, most common error, etc
+     
+What are the top 50 most frequency occuring records?
+     Can we simplfy some of these common actions?
+
+What sequence seems to lead to errors?
+
+ 
