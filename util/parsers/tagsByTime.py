@@ -4,17 +4,9 @@ import sys
 import os
 import re
 import json
+import csv
 
 import Configurator
-
-# These are the values that we are parsing on
-FLAGSRGX = r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])"
-
-# [2015-09-20T19:59:24.5499068-04:00] [DEBUG]
-# This assumes lines that start with a bracket start with a timestamp bracket.
-TIMESTAMPRGX = r'(^\[.+?\.)'
-#DATERGX = r'([0-9]{4}\-[0-9]{2}\-[0-9]+)'
-#TIMERGX = r'[0-9]+\:[0-9]{2}\:[0-9]{2})'
 
 # This script will derive the full path to the in and out files
 Inpath = ''
@@ -49,35 +41,74 @@ def Main(infile):
 
 
 def ParseMap(infile, outfile):
-    timestampRgxC = re.compile(TIMESTAMPRGX)
+    # TODO: get the regex value that are project specific from a config file.
+    # We must begin with a simple assumption:
+    #   Every new valid log record begins with the same two tags [timestamp][flag]
+    # Example target from log file: [2015-09-20T19:59:24.5499068-04:00] [DEBUG]
+
+    motifRgx = r'^\[[0-9]{4}\-.+?].+?]'
+
+    # Dictionary for 10 minute segments of a given day
+    tSegments = dict.fromkeys([i for i in range(144)])
+    for i in range(len(tSegments)):
+        tSegments[i] = 0
+
+    #tSegments = [i for i in range(144)]
+ 
+    #FLAGSRGX = r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])"
+
+    # This assumes lines that start with a bracket start with a timestamp bracket.
+    #DATERGX = r'(^\[)'
+    #TIMERGX = r'[0-9]+\:[0-9]{2}\:[0-9]{2})'
+
+    #timestampRgxC = re.compile(TIMESTAMPRGX)
     #dateRgxC = re.compile(DATERGX)
     #timeRgxC = re.compile(TIMERGX)
-    flagRgxC = re.compile(FLAGSRGX)
-    timeSegments = []
-    modulus = 0
-    previousDate = ''
-
+    #flagRgxC = re.compile(FLAGSRGX)
+    motifRgxC = re.compile(motifRgx)
+    lastTime = ''
+    lastMinute = ''
+    
     with open(infile, 'r') as instream:
         for line in instream:
-            time = timestampRgxC.search(line)
-            flag = flagRgxC.search(line)
-            
-            if (time and flag):
-                datetime = time.group().split('T')
-                date = datetime[0]
-                time = datetime[1]
-                
-                print ('Date: ' + date)
-                print ('Time: ' + time)
+            motif = motifRgxC.search(line)
 
-                if(len(previousDate)<=0):
-                    previousTime = time
+            if (motif):
+                # Attempt an easy split. This should work most/all of the time based on our assumptions.
+                motifsplit = re.split('\[|\]|\-|T|:|\.', motif.group())
+
+                year = motifsplit[1]
+                month = motifsplit[2]
+                day = motifsplit[3]
+                hour = motifsplit[4]
+                minute = motifsplit[5]
+                second = motifsplit[6]
+                sev = motifsplit[11]
+
+                # This is where we check our assuptions and validate the data we just collected.
+                # If the data we collected does not match our assumptions (e.g. 'year' is empty)
+                # TODO
+
+                if len(lastTime) <= 0:
+                    lastTime = (year + month + day)
                 
-                if(previousTime is not time):
-                    print ('The log has rolled over to the next day. Parser will now self terminate. Hasta la vista.')
-                    return
+                if lastTime != (year + month + day):
+                    print ('The log has rolled over to another day. No further parsing will be done. Processing will complete with data collected until this point.')
+                    break
                 
-                #outstream.write(word.group()[1])
+                # map hours to 10 minute segments
+                mapHour = (int(hour) * 6)
+                mapMinute = int(int(minute) / 10)
+                mapTimeseg = (mapHour + mapMinute)
+                # Just count ERROR - TODO extend this for all tags
+                if sev[0] == 'D':
+                    #print(str(mapTimeseg) + ' ' + str(tSegments[mapTimeseg]))
+                    tSegments[mapTimeseg] += 1 
+
+        # TODO find a more robust way of doing this with csv
+        with open(outfile, 'w') as outstream:
+            for i in tSegments:
+                outstream.write(str(i) + ' ' + str(tSegments[i]) + '\n')
 
     print ("--DoneonRings--") 
 
