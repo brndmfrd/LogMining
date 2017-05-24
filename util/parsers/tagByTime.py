@@ -8,7 +8,6 @@ import csv
 
 import Configurator
 
-# This script will derive the full path to the in and out files
 Inpath = ''
 Outpath = ''
 
@@ -42,6 +41,7 @@ def Main(infile):
 
 def ParseMap(infile, outfile):
     # TODO: get the regex value that are project specific from a config file.
+
     # We must begin with a simple assumption:
     #   Every new valid log record begins with the same two tags [timestamp][flag]
     # Example target from log file: [2015-09-20T19:59:24.5499068-04:00] [DEBUG]
@@ -53,18 +53,6 @@ def ParseMap(infile, outfile):
     for i in range(len(tSegments)):
         tSegments[i] = 0
 
-    #tSegments = [i for i in range(144)]
- 
-    #FLAGSRGX = r"(\[VERBOSE\]|\[TRACE\]|\[DEBUG\]|\[INFO\]|\[WARN\]|\[ERROR\]|\[FATAL\])"
-
-    # This assumes lines that start with a bracket start with a timestamp bracket.
-    #DATERGX = r'(^\[)'
-    #TIMERGX = r'[0-9]+\:[0-9]{2}\:[0-9]{2})'
-
-    #timestampRgxC = re.compile(TIMESTAMPRGX)
-    #dateRgxC = re.compile(DATERGX)
-    #timeRgxC = re.compile(TIMERGX)
-    #flagRgxC = re.compile(FLAGSRGX)
     motifRgxC = re.compile(motifRgx)
     lastTime = ''
     lastMinute = ''
@@ -74,7 +62,7 @@ def ParseMap(infile, outfile):
             motif = motifRgxC.search(line)
 
             if (motif):
-                # Attempt an easy split. This should work most/all of the time based on our assumptions.
+                # Attempt an easy split. This should work most/all of the time, based on our assumptions.
                 motifsplit = re.split('\[|\]|\-|T|:|\.', motif.group())
 
                 year = motifsplit[1]
@@ -100,7 +88,8 @@ def ParseMap(infile, outfile):
                 mapHour = (int(hour) * 6)
                 mapMinute = int(int(minute) / 10)
                 mapTimeseg = (mapHour + mapMinute)
-                # Just count ERROR - TODO extend this for all tags
+
+                # Just count DEBUG - uses first letter of tag
                 if sev[0] == 'D':
                     #print(str(mapTimeseg) + ' ' + str(tSegments[mapTimeseg]))
                     tSegments[mapTimeseg] += 1 
