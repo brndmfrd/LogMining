@@ -8,9 +8,6 @@ import csv
 
 import Configurator
 
-Inpath = ''
-Outpath = ''
-
 
 def Main(infile):
     outfile = f"{infile}.out"
@@ -18,28 +15,39 @@ def Main(infile):
     print (f"Proceeding with filename {infile} as input.")
     print (f"Proceeding with filename {outfile} as output.")
     
-    configDict = Configurator.SetConfigurations(['input', 'output'])
+    configDict = Configurator.SetConfigurations(['input', 'temp'])
 
-    Inpath = configDict['input']
-    Outpath = configDict['output']
+    inpath = configDict['input']
+    outpath = configDict['temp']
 
-    print (f'Using input directory: {Inpath}')
-    print (f'Using output directory: {Outpath}')
+    print (f'Using input directory: {inpath}')
+    print (f'Using output directory: {outpath}')
 
-    if len(Inpath)<=0 or len(Outpath)<=0:
-        print (f'Inpath or Outpath could not be determined. Please ensure this script is being ran from inside the project directory structure. This process will now terminate.')
+    if len(inpath)<=0 or len(outpath)<=0:
+        print (f'inpath or outpath could not be determined. Please ensure this script is being ran from inside the project directory structure. This process will now terminate.')
         return
 
-    inFileNamePath = Inpath + infile
-    outFileNamePath = Outpath + outfile
+    inFileNamePath = inpath + infile
+    outFileNamePath = outpath + outfile
 
     print (f'Using input full filename path: {inFileNamePath}')
     print (f'Using output full filename path: {outFileNamePath}')
 
-    ParseMap(inFileNamePath, outFileNamePath)
+    tSegments = ParseMap(inFileNamePath)
+
+    print ('Finished parsing.')
+    print ('Begin writing to output file.')
+
+    # Todo Find A More Robust Way Of Doing this with csv
+    with open(outfile, 'w') as outstream:
+        for i in tSegments:
+            outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
+            outstream.write(outst) 
+    
+    print ("--DoneonRings--") 
 
 
-def ParseMap(infile, outfile):
+def ParseMap(infile):
     # TODO: get the regex value that are project specific from a config file.
 
     # We must begin with a simple assumption:
@@ -58,7 +66,6 @@ def ParseMap(infile, outfile):
 
     motifRgxC = re.compile(motifRgx)
     lastTime = ''
-    lastMinute = ''
     
     with open(infile, 'r') as instream:
         for line in instream:
@@ -111,13 +118,7 @@ def ParseMap(infile, outfile):
                 if sev[0] == 'F':
                     tSegments[mapTimeseg][5] += 1 
 
-        # TODO find a more robust way of doing this with csv
-        with open(outfile, 'w') as outstream:
-            for i in tSegments:
-                outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
-                outstream.write(outst)
-
-    print ("--DoneonRings--") 
+        return tSegments
 
 
 if __name__ == "__main__":
