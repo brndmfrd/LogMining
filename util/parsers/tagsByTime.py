@@ -7,46 +7,32 @@ import json
 import csv
 
 import Configurator
+import DefaultConfig
 
-
+# When running this script standalone we use a default configuration
+# We expect the default config to give us an out path to temp/
 def Main(infile):
-    outfile = f"{infile}.out"
+    # Use out default in/out paths
+    inFileNamePath, outFileNamePath = DefaultConfig.Setup(infile)
 
-    print (f"Proceeding with filename {infile} as input.")
-    print (f"Proceeding with filename {outfile} as output.")
-    
-    configDict = Configurator.SetConfigurations(['input', 'temp'])
-
-    inpath = configDict['input']
-    outpath = configDict['temp']
-
-    print (f'Using input directory: {inpath}')
-    print (f'Using output directory: {outpath}')
-
-    if len(inpath)<=0 or len(outpath)<=0:
-        print (f'inpath or outpath could not be determined. Please ensure this script is being ran from inside the project directory structure. This process will now terminate.')
-        return
-
-    inFileNamePath = inpath + infile
-    outFileNamePath = outpath + outfile
-
-    print (f'Using input full filename path: {inFileNamePath}')
-    print (f'Using output full filename path: {outFileNamePath}')
-
+    # Perform the parsing
     tSegments = ParseMap(inFileNamePath)
 
     print ('Finished parsing.')
     print ('Begin writing to output file.')
 
-    # Todo Find A More Robust Way Of Doing this with csv
-    with open(outfile, 'w') as outstream:
+    # Write the output
+    # Todo find a more robust way of doing this with csv
+    with open(outFileNamePath, 'w') as outstream:
         for i in tSegments:
             outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
             outstream.write(outst) 
-    
+
     print ("--DoneonRings--") 
 
 
+# In: Full filename path of input file.
+# Out: Dictionary 
 def ParseMap(infile):
     # TODO: get the regex value that are project specific from a config file.
 
@@ -99,6 +85,7 @@ def ParseMap(infile):
                 mapMinute = int(int(minute) / 10)
                 mapTimeseg = (mapHour + mapMinute)
 
+                # TODO use switch stmnt
                 # Count DEBUG - uses first letter of tag
                 if sev[0] == 'D':
                     tSegments[mapTimeseg][0] += 1 
