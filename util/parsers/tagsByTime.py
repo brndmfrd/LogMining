@@ -3,10 +3,10 @@
 import sys
 import os
 import re
-import json
-import csv
+#import json
+#import csv
 
-import Configurator
+#import Configurator
 import DefaultConfig
 
 # When running this script standalone we use a default configuration
@@ -31,8 +31,11 @@ def Main(infile):
     print ("--DoneonRings--") 
 
 
-# In: Full filename path of input file.
-# Out: Dictionary 
+# Parses a given input file for timestamp and log level tag
+# Returns a structured data representing the count of the tags per 10 minute increments for one day.
+# If the day (timestamp) changes while reading the file, the parsing does not continue parsing records for a  different day.
+# In: Full filename path of input file; this file will be read.
+# Out: Dictionary and datetime
 def ParseMap(infile):
     # TODO: get the regex value that are project specific from a config file.
 
@@ -85,7 +88,7 @@ def ParseMap(infile):
                 mapMinute = int(int(minute) / 10)
                 mapTimeseg = (mapHour + mapMinute)
 
-                # TODO use switch stmnt
+               # TODO use switch stmnt 
                 # Count DEBUG - uses first letter of tag
                 if sev[0] == 'D':
                     tSegments[mapTimeseg][0] += 1 
@@ -105,7 +108,7 @@ def ParseMap(infile):
                 if sev[0] == 'F':
                     tSegments[mapTimeseg][5] += 1 
 
-        return tSegments
+        return tSegments, lastTime
 
 
 if __name__ == "__main__":
