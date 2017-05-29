@@ -1,4 +1,4 @@
-import Configurator
+import configurator
 
 
 # In: Name of the input file to be used for processing
@@ -11,7 +11,7 @@ def Setup(infile):
     print (f"Proceeding with filename {infile} as input.")
     print (f"Proceeding with filename {outfile} as output.")
     
-    configDict = Configurator.SetConfigurations(['input', 'temp'])
+    configDict = configurator.SetConfigurations(['input', 'temp'])
 
     inpath = configDict['input']
     outpath = configDict['temp']

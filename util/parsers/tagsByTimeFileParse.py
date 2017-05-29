@@ -7,16 +7,16 @@ import re
 #import csv
 
 #import Configurator
-import DefaultConfig
+
 
 # When running this script standalone we use a default configuration
 # We expect the default config to give us an out path to temp/
 def Main(infile):
     # Use out default in/out paths
-    inFileNamePath, outFileNamePath = DefaultConfig.Setup(infile)
+    inFileNamePath, outFileNamePath = defaultConfig.Setup(infile)
 
     # Perform the parsing
-    tSegments = ParseMap(inFileNamePath)
+    tSegments, targetDay = ParseMap(inFileNamePath)
 
     print ('Finished parsing.')
     print ('Begin writing to output file.')
@@ -116,6 +116,8 @@ if __name__ == "__main__":
         print ("A file name is required as argument i.e.$tagPrs.py myinputfile.txt")
         print ("This process will now close.")
     else:
+        import defaultConfig
         Main(sys.argv[1])
+
 
 #TODO: if no input file name is given display the files in the Input/ to the user
