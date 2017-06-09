@@ -82,9 +82,13 @@ def Main():
         recordCount += 1
 
     print (f'Processed \'{recordCount}\' files.')
-    
-    for i in tSegments:
-        print (str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n')
+
+    # Write the output
+    # Todo find a more robust way of doing this with csv
+    with open(outFileNamePath, 'w') as outstream:
+        for i in tSegments:
+            outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
+            outstream.write(outst) 
 
 
 
