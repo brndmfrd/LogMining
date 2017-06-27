@@ -87,6 +87,16 @@ print(cor(data[5], data[6], use="all.obs", method="pearson"))
 print("=============== Error / Error Correlation ===============")
 print(cor(data[6], data[6], use="all.obs", method="pearson"))
 
+# Is there a correlation between warnings and errors:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Debug / Warn Correlation ===============")
+print(cor(data[2], data[5], use="all.obs", method="pearson"))
+
+# Is there a correlation between warnings and errors:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Debug / Info Correlation ===============")
+print(cor(data[2], data[4], use="all.obs", method="pearson"))
+
 
 
 
