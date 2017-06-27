@@ -14,6 +14,7 @@ tags = c("DEBUG", "VERBOSE", "INFO", "WARN", "ERROR", "FATAL")
 
 # Hmm, (can we)/(should we) use one of our config files (%projectRoot%/conf/dirpaths.conf) that our python scripts use to 
 # derive relative paths for us?
+# In through the out door. This data is expected to already be wrangled and formatted properly for us.
 infile = "./../data/output/tagsByTime.out"
 
 # data is expected to be structured such that each row is a different time segment and 
@@ -59,6 +60,35 @@ for (i in 2:7){
   print(sd (unlist(data[i])))
 }
 
+# Is there a correlation between debug and error:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Debug / Error Correlation ===============")
+print(cor(data[2], data[6], use="all.obs", method="pearson"))
+
+# Commented out since verbose logging is turned off.
+# R will complain if the standard deviation is 0. i.e. c(0,0,...,0)
+# Is there a correlation between debug and error:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+#print("=============== Verbose / Error Correlation ===============")
+#print(cor(data[3], data[6], use="all.obs", method="pearson"))
+
+# Is there a correlation between debug and error:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Info / Error Correlation ===============")
+print(cor(data[4], data[6], use="all.obs", method="pearson"))
+
+# Is there a correlation between warnings and errors:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Warning / Error Correlation ===============")
+print(cor(data[5], data[6], use="all.obs", method="pearson"))
+
+# Is there a correlation between warnings and errors:
+# 2DEBUG, 3VERBOSE, 4INFO, 5WARN, 6ERROR, 7FATAL
+print("=============== Error / Error Correlation ===============")
+print(cor(data[6], data[6], use="all.obs", method="pearson"))
+
+
+
 
 
 # Draw line of best fit
@@ -66,6 +96,8 @@ for (i in 2:7){
 
 
 
+# compdata = c(data[2], data[5])
+# lm(V2 ~ V5, data = compdata)
 
 
 
