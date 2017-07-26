@@ -3,26 +3,18 @@
 import sys
 import os
 import re
-#import json
-#import csv
 
-#import Configurator
-
-
-# When running this script standalone we use a default configuration
-# We expect the default config to give us an out path to temp/
+'''
+This method is called when running standalone
+Boilerplate will include defaultConfig
+'''
 def Main(infile):
-    # Use out default in/out paths
     inFileNamePath, outFileNamePath = defaultConfig.Setup(infile)
 
-    # Perform the parsing
+    # Parsing workhorse
     tSegments, targetDay = ParseMap(inFileNamePath)
-
-    print ('Finished parsing.')
-    print ('Begin writing to output file.')
-
-    # Write the output
-    # Todo find a more robust way of doing this with csv
+    
+    # Begin writing to output file.
     with open(outFileNamePath, 'w') as outstream:
         for i in tSegments:
             outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
@@ -31,18 +23,14 @@ def Main(infile):
     print ("--DoneonRings--") 
 
 
-# Parses a given input file for timestamp and log level tag
-# Returns a structured data representing the count of the tags per 10 minute increments for one day.
-# If the day (timestamp) changes while reading the file, the parsing does not continue parsing records for a  different day.
-# In: Full filename path of input file; this file will be read.
-# Out: Dictionary and datetime
+'''
+Parses a given input file for timestamp and log level tag
+Returns a structured data representing the count of the tags per 10 minute increments for one day.
+If the day (timestamp) changes while reading the file, the parsing does not continue parsing records for a  different day.
+In: Full filename path of input file; this file will be read.
+Out: Dictionary and datetime
+'''
 def ParseMap(infile):
-    # TODO: get the regex value that are project specific from a config file.
-
-    # We must begin with a simple assumption:
-    #   Every new valid log record begins with the same two tags [timestamp][flag]
-    # Example target from log file: [2015-09-20T19:59:24.5499068-04:00] [DEBUG]
-
     motifRgx = r'^\[[0-9]{4}\-.+?].+?]'
 
     # Dictionary for 10 minute segments of a given day
