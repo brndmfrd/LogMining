@@ -4,17 +4,23 @@ import sys
 import os
 import re
 
-'''
-This method is called when running standalone
-Boilerplate will include defaultConfig
-'''
-def Main(infile):
-    inFileNamePath, outFileNamePath = defaultConfig.Setup(infile)
+import configurator
 
-    # Parsing workhorse
+'''
+Parse structured log files by their tags. 
+Return structured output; rows are ten-minute segments of a day; 
+columns are the counts of each tag type.
+Standalone - Reads cl-argument as input file name.
+'''
+
+
+def Main(infile):
+    configDict = configurator.SetConfigurations(['input', 'temp'])
+    inFileNamePath = configDict['input'] + infile
+    outFileNamePath = configDict['temp'] + ig.Setup(infile)
+
     tSegments, targetDay = ParseMap(inFileNamePath)
-    
-    # Begin writing to output file.
+
     with open(outFileNamePath, 'w') as outstream:
         for i in tSegments:
             outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in tSegments[i]]) + '\n'
@@ -23,21 +29,13 @@ def Main(infile):
     print ("--DoneonRings--") 
 
 
-'''
-Parses a given input file for timestamp and log level tag
-Returns a structured data representing the count of the tags per 10 minute increments for one day.
-If the day (timestamp) changes while reading the file, the parsing does not continue parsing records for a  different day.
-In: Full filename path of input file; this file will be read.
-Out: Dictionary and datetime
-'''
 def ParseMap(infile):
     motifRgx = r'^\[[0-9]{4}\-.+?].+?]'
 
     # Dictionary for 10 minute segments of a given day
     tSegments = dict.fromkeys([i for i in range(144)])
 
-    # Initialize the dictionary. 
-    # TODO: set the range below to the number of configured tags.
+    # Initialize the dictionary. The range is the number of tags we expect. 
     for i in range(len(tSegments)):
         tSegments[i] = [0 for i in range(6)]
 
@@ -49,7 +47,7 @@ def ParseMap(infile):
             motif = motifRgxC.search(line)
 
             if (motif):
-                # Attempt an easy split. This should work most/all of the time, based on our assumptions.
+                # Regex for the prefix-structure of each row.
                 motifsplit = re.split('\[|\]|\-|T|:|\.', motif.group())
 
                 year = motifsplit[1]
@@ -60,15 +58,11 @@ def ParseMap(infile):
                 second = motifsplit[6]
                 sev = motifsplit[11]
 
-                # This is where we check our assuptions and validate the data we just collected.
-                # If the data we collected does not match our assumptions (e.g. 'year' is empty)
-                # TODO
-
                 if len(lastTime) <= 0:
                     lastTime = (year + month + day)
                 
+                # If the log changes days, we stop parsing.
                 if lastTime != (year + month + day):
-                    print ('The log has rolled over to another day. No further parsing will be done. Processing will complete with data collected until this point.')
                     break
                 
                 # map hours to 10 minute segments
@@ -76,7 +70,7 @@ def ParseMap(infile):
                 mapMinute = int(int(minute) / 10)
                 mapTimeseg = (mapHour + mapMinute)
 
-               # TODO use switch stmnt 
+                # TODO use switch stmnt 
                 # Count DEBUG - uses first letter of tag
                 if sev[0] == 'D':
                     tSegments[mapTimeseg][0] += 1 
@@ -103,9 +97,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print ("A file name is required as argument i.e.$tagPrs.py myinputfile.txt")
         print ("This process will now close.")
-    else:
-        import defaultConfig
+    else:        
         Main(sys.argv[1])
-
-
-#TODO: if no input file name is given display the files in the Input/ to the user
