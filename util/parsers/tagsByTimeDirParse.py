@@ -91,7 +91,12 @@ def Main():
             outstream.write(outst) 
 
 
-
+'''
+If this script is started we give the option to add 'yes' as an argument to skip the prompt at the start.
+$python tagsByTimeDirParse.py 
+or
+$python tagsByTimeDirParse.py yes
+'''
 if __name__ == "__main__":
     continueFlag = 'do not continue'
 
