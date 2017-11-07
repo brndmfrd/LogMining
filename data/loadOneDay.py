@@ -5,6 +5,8 @@ from os import listdir
 from os.path import isfile, join
 
 
+firstRecordTimestamp = ''
+
 
 '''
  Takes a target directory and reads any/all files that are contained inside.
@@ -29,37 +31,46 @@ def ReadAllFilesInDirectory(targetDirPath):
     inputFileList.sort()
 
     # TODO move regex to a static file to allow picking and choosing of consistant patterns.
-    firstRecordTimestamp = ''
-    timestampPrefixRegex = re.compile(r'^\[[0-9]{4}\-.+?].+?]')
+    #timestampPrefixRegex = re.compile(r'^\[[0-9]{4}\-.+?].+?]')
+    timestampPrefixRegex = re.compile(r'^\[[0-9]{4}\-[0-9]{2}\-[0-9]{2}')
 
     for infile in inputFileList:
-        temp_tSegments, timestamp = ParseMap(infile)
+        print(f'file: {infile}')
+        logRecords, badRecordCount, lastRecordTimestamp = ReadFromFile(infile, timestampPrefixRegex)
 
-        if len(lastTimestamp)<=0:
-            lastTimestamp = timestamp
-            print (f'Initial timestamp: {timestamp}')
+        print(badRecordCount)
 
-        if timestamp != lastTimestamp:
-            print (f'Timestamp changed to: {timestamp}')
-            break
-
-        for row in range(0, len(temp_tSegments)):
-            for i in range(0, len(temp_tSegments[row])):
-                tSegments[row][i] = tSegments[row][i] + temp_tSegments[row][i]
-        recordCount += 1    
-
-    return filedata 
+        if lastRecordTimestamp != firstRecordTimestamp:
+            if len(firstRecordTimestamp)<=0:
+                # This means we read at least one file and did not find a timestamp in it.
+                # Warning?
+                print('How did you manage to read a file with no suitable timestamp?')
+            else:
+                print('We stopped matching')
+                break
+        
+    return
 
 
 
 '''
  Takes 
     infile := full path input file
-    startedTimestamp := timestamp marker when we started reading files from directory
+    lastTime := timestamp marker when we started reading files from directory
     prefixRe := timestamp prefix regex pattern
- Reads lines from file until end of file or record timestamp is found to be a different day.
+ Processes
+    Reads lines from file until end of file or record timestamp is found to be a different day.
+ Returns
+    goodRecords := list of all records that match the target date
+    badRecordCount := lines read from the file that do not match proper log file format
+    recordDate := date from last read record (this includes non-matching date)
 '''
-def ParseMap(infile, startedTimestamp, prefixRe):    
+def ReadFromFile(infile, prefixRe):     
+    goodRecords = []
+    recordDate = ''
+    badRecordCount = 0
+    global firstRecordTimestamp
+
     with open(infile, 'r') as instream:
         for line in instream:
             motif = prefixRe.search(line)
@@ -71,47 +82,35 @@ def ParseMap(infile, startedTimestamp, prefixRe):
                 year = motifsplit[1]
                 month = motifsplit[2]
                 day = motifsplit[3]
-                hour = motifsplit[4]
-                minute = motifsplit[5]
-                second = motifsplit[6]
-                sev = motifsplit[11]
 
-                if len(lastTime) <= 0:
-                    lastTime = (year + month + day)
+                #hour = motifsplit[4]
+                #minute = motifsplit[5]
+                #second = motifsplit[6]
+                #sev = motifsplit[11]
+
+                # Append these values together to make a date (19991230)
+                recordDate = (year + month + day)
+
+                # Either first timestamp or record read is from a differernt day
+                if firstRecordTimestamp != recordDate:
+                    if len(firstRecordTimestamp) <= 0:
+                        # set script-wide scope variable - one script one firstRecordTimestamp
+                        firstRecordTimestamp = recordDate
+                        print(f'setting the firstRecordTimestamp:{firstRecordTimestamp}')
+                    else: 
+                        print('We stopped matching inside of this file')
+                        break
                 
-                # If the log changes days, we stop parsing.
-                if lastTime != (year + month + day):
-                    break
-                
-                # map hours to 10 minute segments
-                mapHour = (int(hour) * 6)
-                mapMinute = int(int(minute) / 10)
-                mapTimeseg = (mapHour + mapMinute)
-
-                # TODO use switch stmnt 
-                # Count DEBUG - uses first letter of tag
-                if sev[0] == 'D':
-                    tSegments[mapTimeseg][0] += 1 
-                # Count VERBOSE - uses first letter of tag
-                if sev[0] == 'V':
-                    tSegments[mapTimeseg][1] += 1 
-                # Count INFO - uses first letter of tag
-                if sev[0] == 'I':
-                    tSegments[mapTimeseg][2] += 1 
-                # Count WARN - uses first letter of tag
-                if sev[0] == 'W':
-                    tSegments[mapTimeseg][3] += 1 
-                # Count ERROR - uses first letter of tag
-                if sev[0] == 'E':
-                    tSegments[mapTimeseg][4] += 1 
-                # Count FATAL - uses first letter of tag
-                if sev[0] == 'F':
-                    tSegments[mapTimeseg][5] += 1 
-
-        return tSegments, lastTime
+                goodRecords.append(line)
+            else:
+                badRecordCount = badRecordCount + 1
 
 
-
+    print(f'count good reads {len(goodRecords)}')
+    print(f'count bad reads {badRecordCount}')    
+    print(f'target record date {firstRecordTimestamp}')
+    print(f'last record date {recordDate}')
+    return goodRecords, badRecordCount, recordDate
 
 
 

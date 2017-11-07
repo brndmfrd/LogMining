@@ -30,3 +30,6 @@ R v3.3.2
 
 * reports/
 	Reports on data analysis. These reports outline what was expected, what processes ran (and how to recreate the raw data and output), what graphs are used, what binaries are used, and contrast what was expected with what was discovered and any further implications or curiosities.
+
+
+NOTE: The file reading routine, at this time, reads only intended records that have a proper format. They will not read 'additional info' such as stack traces.
