@@ -1,7 +1,5 @@
 #!/usr/local/bin/python3.6
 
-import sys
-import os
 import re
 
 '''
@@ -10,9 +8,8 @@ Return structured output; rows are ten-minute segments of a day;
 columns are the counts of each tag type.
 Standalone - Reads cl-argument as input file name.
 Assumption: The log data passed is all from the same day
-
 '''
-def ParseMap(infile):
+def ParseMap(logData):
     motifRgx = r'^\[[0-9]{4}\-.+?].+?]'
 
     # Dictionary for 10 minute segments of a given day
@@ -23,9 +20,8 @@ def ParseMap(infile):
         tSegments[i] = [0 for i in range(6)]
 
     motifRgxC = re.compile(motifRgx)
-    lastTime = ''
     
-    for line in infile:
+    for line in logData:
         motif = motifRgxC.search(line)
 
         if (motif):
