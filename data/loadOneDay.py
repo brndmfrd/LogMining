@@ -116,6 +116,7 @@ def ReadFromFile(infile, prefixRe):
 
 if __name__ == "__main__":
     # target a default directory
-    targetDirPath = '/home/bryan/GitRepos/LogMining/data/input'
+    targetDirPath = '/home/bryan/GitRepos/LogMining/data/temp'
+    #targetDirPath = '/home/bryan/GitRepos/LogMining/data/input'
 
     ReadAllFilesInDirectory(targetDirPath)
