@@ -1,0 +1,12 @@
+As the size of the raw data increases it will become impractical to hold the target data in memory to recycle the data for sucessive trials.
+Because of this it is important to get as much as possible out of the data in a single trial to minimize the amount of data queries, which will 
+take an increasingly greater amount of time as the data increases.
+
+To address the issue of scale an introduction of a parallel-processing data structure should be used and the current candidate is Apache Spark.
+
+Currently we are able to parse the data from raw files and perform simple regex pattern matching to validate the data.
+This approach must be abandoned in the future as it will be impactical to parse all the data for every query for every trial for each user, every run.
+For this a database or structured file system should be used. The current candidates (that work with Apache Spark) are 
+	HDFS
+	Cassandra
+	
