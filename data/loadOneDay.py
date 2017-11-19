@@ -36,8 +36,10 @@ def ReadAllFilesInDirectory(targetDirPath):
 
     for infile in inputFileList:
         print(f'file: {infile}')
-        logRecords, badRecordCount, lastRecordTimestamp = ReadFromFile(infile, timestampPrefixRegex)
+        goodReads, badRecordCount, lastRecordTimestamp = ReadFromFile(infile, timestampPrefixRegex)
 
+        filedata.extend(goodReads)
+        
         print(badRecordCount)
 
         if lastRecordTimestamp != firstRecordTimestamp:
@@ -49,7 +51,7 @@ def ReadAllFilesInDirectory(targetDirPath):
                 print('We stopped matching')
                 break
         
-    return
+    return filedata
 
 
 
@@ -91,7 +93,7 @@ def ReadFromFile(infile, prefixRe):
                 # Append these values together to make a date (19991230)
                 recordDate = (year + month + day)
 
-                # Either first timestamp or record read is from a differernt day
+                # Either first timestamp or record read is from a different day
                 if firstRecordTimestamp != recordDate:
                     if len(firstRecordTimestamp) <= 0:
                         # set script-wide scope variable - one script one firstRecordTimestamp

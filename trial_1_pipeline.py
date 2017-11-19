@@ -1,13 +1,10 @@
-import data.parseByTags as PBT
+import data.parseByTags as Pt
+import data.loadOneDay as LoadOneDay
 
-#PBT.testfunction()
-
-class Trial1Pipeline:
-    classValue = 1
-	
-    def __init__(self):
-        self.classValue = 99999
-
+class Trial1Pipeline:	
+    def __init__(self, inputDirPath):
+        self.inputData = LoadOneDay.ReadAllFilesInDirectory(inputDirPath)
+        
     def __enter__(self):
         return self
 
@@ -20,5 +17,16 @@ class Trial1Pipeline:
         isinstance(exc_value, TypeError)
 	
     def testprint(self):
-        print('it works')
-        return self.classValue
+        print('--Start test--')
+        print( len(self.inputData) )
+        allTheSegments = Pt.ParseMap(self.inputData)
+        
+        
+        # Pretty print the data in the way we should conceptualize it.        
+        for i in allTheSegments:
+            outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in allTheSegments[i]]) + '\n'
+            print(outst)
+            
+        print('--End test--')
+                
+        return allTheSegments
