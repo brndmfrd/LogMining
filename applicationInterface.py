@@ -3,7 +3,6 @@ import os
 #import applicationConfiguration as appConfig
 import trial_1_pipeline
 
-
 '''
 Main routine: BeginTrialSelectionLoop
 Extending: 
@@ -34,7 +33,8 @@ def StartTrial1():
     
     with trial_1_pipeline.Trial1Pipeline(inputDataFilePath) as Trial1:
         result = Trial1.testprint()
-        print('result ' + str(result))
+        #print(DataFrame(result))
+        #print('result ' + str(result))
 
 
 def BeginTrialSelectionLoop():

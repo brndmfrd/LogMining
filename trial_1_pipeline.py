@@ -1,5 +1,6 @@
 import data.parseByTags as Pt
 import data.loadOneDay as LoadOneDay
+from pandas import DataFrame
 
 class Trial1Pipeline:	
     def __init__(self, inputDirPath):
@@ -23,10 +24,16 @@ class Trial1Pipeline:
         
         
         # Pretty print the data in the way we should conceptualize it.        
-        for i in allTheSegments:
-            outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in allTheSegments[i]]) + '\n'
-            print(outst)
-            
+        # for i in allTheSegments:
+            # outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in allTheSegments[i]]) + '\n'
+            # print(outst)
+        
+        df = DataFrame(allTheSegments)
+        df = df.transpose()
+        df.columns = ['DEBUG','VERBOSE','INFO','WARN','ERROR','FATAL',]
+        
+        print(df)
+        
         print('--End test--')
                 
-        return allTheSegments
+        return True
