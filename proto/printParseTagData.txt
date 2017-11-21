@@ -1,0 +1,5 @@
+# Pretty print the data in the way we should conceptualize it.        
+        # for i in allTheSegments:
+            # outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in allTheSegments[i]]) + '\n'
+            # print(outst)
+        

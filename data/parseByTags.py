@@ -28,12 +28,12 @@ def ParseMap(logData):
             # Regex for the prefix-structure of each row.
             motifsplit = re.split('\[|\]|\-|T|:|\.', motif.group())
 
-            year = motifsplit[1]
-            month = motifsplit[2]
-            day = motifsplit[3]
+            #year = motifsplit[1]
+            #month = motifsplit[2]
+            #day = motifsplit[3]
             hour = motifsplit[4]
             minute = motifsplit[5]
-            second = motifsplit[6]
+            #second = motifsplit[6]
             sev = motifsplit[11]
             
             # map hours to 10 minute segments
@@ -45,21 +45,32 @@ def ParseMap(logData):
             if sev[0] == 'D':
                 tSegments[mapTimeseg][0] += 1 
                 continue
-            # Count VERBOSE - uses first letter of tag
-            if sev[0] == 'V':
-                tSegments[mapTimeseg][1] += 1 
+                
             # Count INFO - uses first letter of tag
             if sev[0] == 'I':
                 tSegments[mapTimeseg][2] += 1 
+                continue
+                
             # Count WARN - uses first letter of tag
             if sev[0] == 'W':
                 tSegments[mapTimeseg][3] += 1 
+                continue
+                
             # Count ERROR - uses first letter of tag
             if sev[0] == 'E':
                 tSegments[mapTimeseg][4] += 1 
+                continue
+                
+            # Count VERBOSE - uses first letter of tag
+            if sev[0] == 'V':
+                tSegments[mapTimeseg][1] += 1 
+                continue                
+                
             # Count FATAL - uses first letter of tag
             if sev[0] == 'F':
                 tSegments[mapTimeseg][5] += 1 
+                continue
+                
     return tSegments
 
 '''

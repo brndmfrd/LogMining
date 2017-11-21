@@ -28,16 +28,17 @@ class Trial1Pipeline:
         
         allTheSegments = []
         
+        # Context for our raw data
+        # Raw data access will likely change in the future (DB, HDFS, ETC) 
+        # For now this lets the garbage collector clean up all the data we temporarily hold in memory.
         with LoadOneDay.LoadOneDay(self.inputDataFilePath) as Loader:
             rawData = Loader.ReadAllFilesInDirectory()
-            print( len(rawData) )
+            print( 'Records read from all files - ' + str(len(rawData)) )
             allTheSegments = Pt.ParseMap(rawData)
             
-        # Pretty print the data in the way we should conceptualize it.        
-        # for i in allTheSegments:
-            # outst = str(i).ljust(8) + ''.join([str(x).ljust(8) for x in allTheSegments[i]]) + '\n'
-            # print(outst)
-        
+                
+        # Turn our data into a DATAFRAME 
+        # Pretty print our DATAFRAME 
         df = Pd.DataFrame(allTheSegments)
         df = df.transpose()
         df.columns = ['DEBUG','VERBOSE','INFO','WARN','ERROR','FATAL',]

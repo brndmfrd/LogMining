@@ -33,8 +33,6 @@ def StartTrial1():
     
     with trial_1_pipeline.Trial1Pipeline(inputDataFilePath) as Trial1:
         result = Trial1.Pipeline()
-        #print(DataFrame(result))
-        #print('result ' + str(result))
 
 
 def BeginTrialSelectionLoop():

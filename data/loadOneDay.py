@@ -53,7 +53,7 @@ class LoadOneDay:
         timestampPrefixRegex = re.compile(r'^\[[0-9]{4}\-[0-9]{2}\-[0-9]{2}')
 
         for infile in inputFileList:
-            print(f'file: {infile}')
+            print(f'{infile}')
             goodReads, badRecordCount, lastRecordTimestamp = self.ReadFromFile(infile, timestampPrefixRegex)
 
             filedata.extend(goodReads)
