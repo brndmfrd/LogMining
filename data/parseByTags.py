@@ -77,7 +77,7 @@ def ParseMap(logData):
 TODO: replace with unit test
 main should only be called for demonstration or testing purposes
 '''
-def TestFunction():
+if __name__ == "__main__":
     sampleLogs = ['[2015-09-21T00:16:27.9743119-04:00] [DEBUG] [32 ] [Tgw.Wcs.CustomLogic.Transportation.ServiceAgents.CustomLogicServiceAgent] FinishSendTask for response [Tgw.Wcs.CustomLogic.Transportation.Facade.Contracts.CheckCompletedTransportResponse]', '[2015-09-21T00:16:27.9743119-04:00] [FATAL] [3  ] [Tgw.Wcs.Transportation.Services.PointBehaviorService] LC 00004301557005267111 - After LocationBehavior in PointBehaviorService - /GapFishkill/WA1/CC01/ToAisle3Lift1SI -> /GapFishkill/WA1/CC01/Aisle3Lift1SI - bf0cb0b8-988b-49a6-90f3-0dccf4bed986.', '[2015-09-21T00:16:27.9899406-04:00] [INFO] [50 ] [Tgw.Wcs.Transportation.Services.TransportManager] LC 00004300817225365792 - In FinishTask @ taskManager!']
 
     tSegments = ParseMap(sampleLogs)
