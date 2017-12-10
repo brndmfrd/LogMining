@@ -2,6 +2,7 @@
 
 import re
 
+
 '''
 Parse structured log files by their tags. 
 Return structured output; rows are ten-minute segments of a day; 
