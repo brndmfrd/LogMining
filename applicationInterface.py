@@ -16,12 +16,13 @@ Extending:
 
 import os
 import trial_1_pipeline
+import trial_2_pipeline
 
 applicationLocation = os.path.abspath(os.path.dirname(__file__))
 
 
 def StartTrial1():
-    """Begins trial one's pipeline."""
+    """Begins trial one's pipeline and specific setup configuration."""
     print('StartTrial1')
     tempDataRelPos = r'/data/temp/'
 
@@ -33,11 +34,25 @@ def StartTrial1():
             print('There was a problem processing Trial 1.')
 
 
+def StartTrial2():
+    """Begins trial two's pipeline and specific setup configuration."""
+    print('StartTrial2')
+    tempDataRelPos = r'/data/temp/'
+
+    inputDataFilePath = applicationLocation + tempDataRelPos
+
+    with trial_2_pipeline.Trial2Pipeline(inputDataFilePath) as Trial2:
+        result = Trial2.Pipeline()
+        if not result:
+            print('There was a problem processing Trial 2.')
+
+
 def BeginTrialSelectionLoop():
     """Execute main work loop."""
     # When you add more trials, extend this dictionary!!
     trialDict = {
-        1: StartTrial1
+        1: StartTrial1,
+        2: StartTrial2
     }
 
     keepGoing = 'y'
@@ -45,7 +60,7 @@ def BeginTrialSelectionLoop():
     while keepGoing.upper() == 'Y':
         selection = input('Select which trial to run [1-9]+\t\n')
         if int(selection) > 0 and int(selection) <= len(trialDict):
-            trialDict[int(int(selection))]()
+            trialDict[int(selection)]()
         keepGoing = input('Run a new Trial? [Y/any]')
 
 
