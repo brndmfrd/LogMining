@@ -1,5 +1,6 @@
 
 """Python 3.6.3 Anaconda."""
+import os
 import data.parseByTags as Pt
 import data.loadOneDay as LoadOneDay
 import pandas as Pd
@@ -11,6 +12,12 @@ class Trial1Pipeline:
     def __init__(self, inputDirPath):
         """DocString."""
         self.inputDataFilePath = inputDirPath
+
+        """Construct where the final report data goes for Trial 1"""
+        self.currFileLoc = os.path.abspath(os.path.dirname(__file__))
+        self.reportFileRelPos = r'/data/temp/'
+        self.reportFilePath = self.currFileLoc + self.reportFilePath
+
         print('INIT Trial1Pipeline')
 
     def __enter__(self):
@@ -27,11 +34,13 @@ class Trial1Pipeline:
         """DocString."""
         print('--Start pipeline--')
 
-        """ Read and process data. """
+        # Read and process data.
         allTheSegments = self.GetDataSegments()
 
-        """Prettiefy our data for printing."""
+        # Prettiefy our data for printing.
         self.PrettyPrint(allTheSegments)
+
+        # Generate Stats.
 
         print('--End pipeline--')
 
@@ -50,11 +59,12 @@ class Trial1Pipeline:
             print('--COMPLETE read files from ' +
                   self.inputDataFilePath + ' --')
 
-            """ This does the heart of the processing. """
+            # This does the heart of the processing.
             segmentData = Pt.ParseMap(rawData)
             return segmentData
 
-    def PrettyPrint(self, allTheSegments):
+    @classmethod
+    def PrettyPrint(cls, allTheSegments):
         """ Pretty print our processed data. """
         df = Pd.DataFrame(allTheSegments)
         df = df.transpose()
