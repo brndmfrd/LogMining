@@ -23,7 +23,7 @@ applicationLocation = os.path.abspath(os.path.dirname(__file__))
 
 def StartTrial1():
     """Begins trial one's pipeline and specific setup configuration."""
-    print('StartTrial1')
+    print('BEGIN Trial 1')
     tempDataRelPos = r'/data/temp/'
 
     inputDataFilePath = applicationLocation + tempDataRelPos
@@ -32,11 +32,12 @@ def StartTrial1():
         result = Trial1.Pipeline()
         if not result:
             print('There was a problem processing Trial 1.')
+    print('END Trial 1')
 
 
 def StartTrial2():
     """Begins trial two's pipeline and specific setup configuration."""
-    print('StartTrial2')
+    print('BEGIN Trial 2')
     tempDataRelPos = r'/data/temp/'
 
     inputDataFilePath = applicationLocation + tempDataRelPos
@@ -45,6 +46,7 @@ def StartTrial2():
         result = Trial2.Pipeline()
         if not result:
             print('There was a problem processing Trial 2.')
+    print('END Trial 2')
 
 
 def BeginTrialSelectionLoop():
