@@ -15,8 +15,8 @@ class Trial1Pipeline:
 
         """Construct where the final report data goes for Trial 1"""
         self.currFileLoc = os.path.abspath(os.path.dirname(__file__))
-        self.reportFileRelPos = r'/data/temp/'
-        self.reportFilePath = self.currFileLoc + self.reportFilePath
+        self.reportFileRelPos = r'/trials/trial_1'
+        self.reportFilePath = self.currFileLoc + self.reportFileRelPos
 
         print('INIT Trial1Pipeline')
 
@@ -38,9 +38,10 @@ class Trial1Pipeline:
         allTheSegments = self.GetDataSegments()
 
         # Prettiefy our data for printing.
-        self.PrettyPrint(allTheSegments)
+        dataframe = self.PrettyPrint(allTheSegments)
 
         # Generate Stats.
+        self.GenerateStats(dataframe)
 
         print('--End pipeline--')
 
@@ -74,3 +75,47 @@ class Trial1Pipeline:
                                'display.max_columns',
                                6):
             print(df)
+
+        return df
+
+    def GenerateStats(self, df):
+        """Initialy we will just print the stat out to the console.
+           We can deal with files and dirs later. TODO.
+           Argument df is our input dataframe.
+        """
+        print('=============== Maximums ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].max(axis=0))
+
+        print('=============== Minimums ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].min(axis=0))
+
+        print('=============== Mean (arithmatic) ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].mean(axis=0))
+
+        print('=============== Median ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].median(axis=0))
+
+        print('=============== Sum ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].sum(axis=0))
+
+        print('=============== Std ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].std(axis=0))
+
+        print('=============== Correlation ===============')
+        print(df.corr('pearson', 1))
+
+        """Line of best fit"""
+        # TODO one axis must be time segments
+        # z = np.polyfit(x=df.loc[:, 'DEGUG'], y=df.loc[:, ''], deg=1)
