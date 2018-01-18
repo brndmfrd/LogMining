@@ -4,6 +4,7 @@ import os
 import data.parseByTags as Pt
 import data.loadOneDay as LoadOneDay
 import pandas as Pd
+import matplotlib.pyplot as plt
 
 
 class Trial1Pipeline:
@@ -116,6 +117,9 @@ class Trial1Pipeline:
         print('=============== Correlation ===============')
         print(df.corr('pearson', 1))
 
-        """Line of best fit"""
-        # TODO one axis must be time segments
-        # z = np.polyfit(x=df.loc[:, 'DEGUG'], y=df.loc[:, ''], deg=1)
+        # Plotting
+        for elem in df.columns:
+            df[[elem]].plot()
+
+        df[['WARN', 'ERROR', 'FATAL']].plot(label='Danger Logs')
+        plt.show()
