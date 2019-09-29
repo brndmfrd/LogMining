@@ -1,8 +1,9 @@
 
 """Python 3.6.3 Anaconda."""
-import data.parseByTags as Pt
+import data.parseByTimeout as Pt
 import data.loadOneDay as LoadOneDay
 import pandas as Pd
+import matplotlib.pyplot as plt
 
 
 class Trial2Pipeline:
@@ -30,8 +31,11 @@ class Trial2Pipeline:
         """ Read and process data. """
         allTheSegments = self.GetDataSegments()
 
-        """Prettiefy our data for printing."""
-        self.PrettyPrint(allTheSegments)
+        # Prettiefy our data for printing.
+        dataframe = self.PrettyPrint(allTheSegments)
+
+        # Generate Stats.
+        self.GenerateStats(dataframe)
 
         print('--End pipeline--')
 
@@ -42,7 +46,7 @@ class Trial2Pipeline:
             Cleanup after parsing & mapping as not to tie up memory.
         """
         with LoadOneDay.LoadOneDay(self.inputDataFilePath) as Loader:
-            print('--BEGIN` read files from ' +
+            print('--BEGIN read files from ' +
                   self.inputDataFilePath + ' --')
 
             rawData = Loader.ReadAllFilesInDirectory()
@@ -54,13 +58,60 @@ class Trial2Pipeline:
             segmentData = Pt.ParseMap(rawData)
             return segmentData
 
+    @classmethod
     def PrettyPrint(self, allTheSegments):
         """ Pretty print our processed data. """
         df = Pd.DataFrame(allTheSegments)
         df = df.transpose()
-        df.columns = ['DEBUG', 'VERBOSE', 'INFO', 'WARN', 'ERROR', 'FATAL', ]
+        df.columns = ['EXCEPTION', ]
         with Pd.option_context('display.max_rows',
                                None,
                                'display.max_columns',
-                               6):
+                               1):
             print(df)
+        return df
+
+    def GenerateStats(self, df):
+        """Initialy we will just print the stat out to the console.
+           We can deal with files and dirs later. TODO.
+           Argument df is our input dataframe.
+        """
+        print('=============== Maximums ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].max(axis=0))
+
+        print('=============== Minimums ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].min(axis=0))
+
+        print('=============== Mean (arithmatic) ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].mean(axis=0))
+
+        print('=============== Median ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].median(axis=0))
+
+        print('=============== Sum ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].sum(axis=0))
+
+        print('=============== Std ===============')
+        for elem in df.columns:
+            print(elem)
+            print(df.loc[:, elem].std(axis=0))
+
+        #print('=============== Correlation ===============')
+        #print(df.corr('pearson', 1))
+
+        # Plotting
+        for elem in df.columns:
+            df[[elem]].plot()
+
+        df[['EXCEPTION']].plot(label='Danger Logs')
+        plt.show()

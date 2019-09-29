@@ -51,7 +51,7 @@ def StartTrial2():
 
 def BeginTrialSelectionLoop():
     """Execute main work loop."""
-    # When you add more trials, extend this dictionary!!
+    #When you add more trials, extend this dictionary!!
     trialDict = {
         1: StartTrial1,
         2: StartTrial2
